@@ -22,20 +22,20 @@ export class ProductsController {
   }
   @UseInterceptors(LoggerInterceptor)
   @Get('/')
-  getAll(): any {
-    return this.productsService.getAll();
-  }
+async getAll() {
+  return this.productsService.getAll();
+}
   @Get('/:id')
-  getById(@Param('id', new ParseUUIDPipe()) id: string) {
-    const findProduct = this.productsService.getById(id);
-    if(!findProduct) throw new NotFoundException('Product not found'); 
-    return this.productsService.getById(id);
+  async getById(@Param('id', new ParseUUIDPipe()) id: string) {
+    const prod = await this.productsService.getById(id);
+    if (!prod) throw new NotFoundException('Product not found');
+    return prod;
   }
   @Delete('/:id')
-  removeById(@Param('id', new ParseUUIDPipe()) id: string) {
-    const findProduct = this.productsService.getById(id);
-    if(!findProduct) throw new NotFoundException('Product not found'); 
-    this.productsService.removeById(id);
+  async removeById(@Param('id', new ParseUUIDPipe()) id: string) {
+    if (!(await this.productsService.getById(id)))
+      throw new NotFoundException('Product not found');
+    await this.productsService.removeById(id);
     return { success: true };
   }
   @Post('/')
@@ -44,13 +44,14 @@ export class ProductsController {
     return { success: true };
   }
   @Put('/:id')
-  updateById(
+  async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() productData: UpdateProductDTO,
   ) {
-    const findProduct = this.productsService.getById(id);
-    if(!findProduct) throw new NotFoundException('Product not found'); 
-    this.productsService.updateById(id, productData);
+    if (!(await this.productsService.getById(id)))
+      throw new NotFoundException('Product not found');
+
+    await this.productsService.updateById(id, productData);
     return { success: true };
   }
 }
