@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {  ValidationPipe } from '@nestjs/common'
 import { LoggerInterceptor } from './shared/interceptors/logger/logger';
-import { PrismaService } from './shared/services/prisma/prisma.service';
+import { PrismaService } from './shared/services/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,5 +15,4 @@ async function bootstrap() {
 
   await app.listen(8000);
 }
-
 bootstrap();

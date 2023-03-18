@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
-import { PrismaService } from 'src/shared/services/prisma/prisma.service';
+import { PrismaService } from 'src/shared/services/prisma.service';
 
 @Injectable()
 export class ProductsService {
   constructor(private prismaService: PrismaService) {}
+
   public getAll(): Promise<Product[]> {
     return this.prismaService.product.findMany();
   }
@@ -14,7 +15,7 @@ export class ProductsService {
       where: { id },
     });
   }
-  public removeById(id: Product['id']): Promise<Product> {
+  public deleteById(id: Product['id']): Promise<Product> {
     return this.prismaService.product.delete({
       where: { id },
     });

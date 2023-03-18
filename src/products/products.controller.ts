@@ -22,9 +22,9 @@ export class ProductsController {
   }
   @UseInterceptors(LoggerInterceptor)
   @Get('/')
-async getAll() {
-  return this.productsService.getAll();
-}
+  async getAll() {
+    return this.productsService.getAll();
+  }
   @Get('/:id')
   async getById(@Param('id', new ParseUUIDPipe()) id: string) {
     const prod = await this.productsService.getById(id);
@@ -32,10 +32,10 @@ async getAll() {
     return prod;
   }
   @Delete('/:id')
-  async removeById(@Param('id', new ParseUUIDPipe()) id: string) {
+  async deleteById(@Param('id', new ParseUUIDPipe()) id: string) {
     if (!(await this.productsService.getById(id)))
       throw new NotFoundException('Product not found');
-    await this.productsService.removeById(id);
+    await this.productsService.deleteById(id);
     return { success: true };
   }
   @Post('/')
